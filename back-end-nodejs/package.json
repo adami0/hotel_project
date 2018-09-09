@@ -1,0 +1,32 @@
+{
+  "name": "facilhote",
+  "version": "0.0.1",
+  "description": "hotel management application to simplify the management of a hotel for manager and his employees",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrWOLFF24/hotel_project.git"
+  },
+  "keywords": [
+    "hotel",
+    "management",
+    "api"
+  ],
+  "author": "Haroon <kakashi24@live.fr>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrWOLFF24/hotel_project/issues"
+  },
+  "homepage": "https://github.com/MrWOLFF24/hotel_project#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
