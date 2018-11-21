@@ -2,7 +2,7 @@
   <div id="error-page">
     <img src="../assets/404.svg" alt="404 error page not found">
     <div>
-      <h1 class="padding">Oops... mauvaise planete!</h1>
+      <h1 class="padding">Oops... mauvaise planète!</h1>
       <p class="padding">Il semblerait que vous vous soyez trompé de planète,
         échappez-vous ils arrivent.</p>
       <button id="error-page-btn" @click="backToHome">Retour à l'accueil</button>

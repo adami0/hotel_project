@@ -1,15 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link>
+    <div>
+      <Navbar></Navbar>
     </div>
     <main id="main-content">
       <router-view/>
     </main>
   </div>
 </template>
+
+<script>
+import Navbar from "@/components/nav/Navbar.vue";
+export default {
+    components: {
+      'Navbar' : Navbar,
+    },
+}
+</script>
+
 
 <style lang="scss">
 body {
@@ -24,17 +32,6 @@ body {
   text-align: center;
   color: #2c3e50;
   background-color: #f8fafb;
-}
-#nav {
-  padding: 30px;
-  position: absolute;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 #main-content {
   height: calc(100vh - 82px);

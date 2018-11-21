@@ -1,6 +1,6 @@
 <template>
   <div>
-    hello
+   safi tu fais quoi?
   </div>
 </template>
 
@@ -12,4 +12,3 @@ export default {
 
 <style scoped>
 </style>
-
