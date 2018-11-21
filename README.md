@@ -73,6 +73,8 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 - **Haroon MOHAMMAD** - _Initial work_ - [MrWOLFF24](https://github.com/MrWOLFF24)
+- **Adèle PARISON** - _Initial work_ - [adeleparison](https://github.com/adeleparison)
+- **Ayaba KUMAKO** - _Initial work_ - [ak-yaps](https://github.com/ak-yaps)
 
 See also the list of [contributors](https://github.com/MrWOLFF24/hotel_project/contributors) who participated in this project.
 
