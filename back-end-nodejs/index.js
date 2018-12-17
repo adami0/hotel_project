@@ -15,9 +15,15 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/:name', (req, res) => {
+  res.status(200).send({
+    message: 'Votre nom est ' + req.params.name
+  });
+});
+
 
 // start server
 const port = process.env.NODE_ENV === 'production' ? 80 : 8000;
-const server = app.listen(port, function () {
+const server = app.listen(port, () => {
   console.log('Server listening on port ' + port);
 });
