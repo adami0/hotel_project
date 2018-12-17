@@ -9,7 +9,7 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: Home,
     },
@@ -30,6 +30,11 @@ export default new Router({
       path: '*',
       name: 'PageNotFound',
       component: () => import('./views/PageNotFound.vue'),
+    },
+    {
+      path: '/',
+      name: 'Dashboard',
+      component: () => import('./views/Dashboard.vue'),
     },
   ],
 });

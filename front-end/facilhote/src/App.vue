@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Navbar from "@/components/nav/Navbar.vue";
+import Navbar from "@/components/nav/Navbar";
 export default {
     components: {
       'Navbar' : Navbar,
@@ -32,10 +32,5 @@ body {
   text-align: center;
   color: #2c3e50;
   background-color: #f8fafb;
-}
-#main-content {
-  height: calc(100vh - 82px);
-  width: 100%;
-  padding-top: 82px;
 }
 </style>
