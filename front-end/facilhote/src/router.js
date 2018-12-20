@@ -36,5 +36,15 @@ export default new Router({
       name: 'Dashboard',
       component: () => import('./views/Dashboard.vue'),
     },
+    {
+      path: '/calendar',
+      name: 'Calendar',
+      component: () => import('./views/Calendar.vue'),
+    },
+    {
+      path: '/client',
+      name: 'Client',
+      component: () => import('./views/Client.vue'),
+    },
   ],
 });
