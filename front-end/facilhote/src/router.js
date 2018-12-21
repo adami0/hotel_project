@@ -19,12 +19,12 @@ export default new Router({
       component: () => import('./views/Login.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/profil',
+      name: 'profil',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      component: () => import(/* webpackChunkName: "about" */ './views/Profil.vue'),
     },
     {
       path: '*',
@@ -35,6 +35,16 @@ export default new Router({
       path: '/',
       name: 'Dashboard',
       component: () => import('./views/Dashboard.vue'),
+    },
+    {
+      path: '/calendar',
+      name: 'Calendar',
+      component: () => import('./views/Calendar.vue'),
+    },
+    {
+      path: '/client',
+      name: 'Client',
+      component: () => import('./views/Client.vue'),
     },
   ],
 });
