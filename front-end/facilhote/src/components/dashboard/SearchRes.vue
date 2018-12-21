@@ -16,7 +16,10 @@
               <button type="button" class="mr-5 px-5 btn btn-lg btn-bg-color">Créer une réservation</button>
             </router-link>
             <router-link to="/calendar">
-              <button type="button" class="px-5 btn btn-lg btn-bg-color">Voir une réservation</button>
+              <button
+                type="button"
+                class="px-5 btn btn-lg btn-res btn-bg-color"
+              >Voir une réservation</button>
             </router-link>
           </div>
         </div>
@@ -38,12 +41,15 @@
   color: white;
   cursor: pointer;
 }
+.btn.btn-bg-color {
+  width: 300px;
+}
 @media (max-width: 776px) {
   .btn.btn-bg-color {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
-  .btn.btn-bg-color ~ .btn.btn-bg-color {
+  .btn-res {
     margin-top: 0.5rem;
   }
 }

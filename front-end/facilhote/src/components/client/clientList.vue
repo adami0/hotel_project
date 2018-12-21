@@ -1,6 +1,7 @@
+
 <template>
-  <div class>
-    <div class="table-responsive-lg">
+  <div>
+    <div class="table-responsive pt-5">
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
@@ -13,8 +14,7 @@
             <th scope="col">Téléphone</th>
             <th scope="col">E-mail</th>
             <th scope="col">Chambre</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th scope="col" colspan="2">Option</th>
           </tr>
         </thead>
         <tbody class="table-sm">
@@ -29,10 +29,26 @@
             <td>{{ client.email}}</td>
             <td>{{ client.room_number }}</td>
             <td>
-              <button>Modifier</button>
-            </td>
-            <td>
-              <button>Supprimer</button>
+              <div class="btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Éditer"
+                >
+                  <img src="../../assets/edit.svg" alt="edit">
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Supprimer"
+                >
+                  <img src="../../assets/trash.svg" alt="trash">
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -51,10 +67,10 @@ export default {
           first_name: "Ann",
           last_name: "Cubbino",
           email: "acubbino0@w3.org",
-          gender: "Female",
+          gender: "Mme",
           telephone: "999-491-7937",
           postal_code: null,
-          room_number: "2859",
+          room_number: "01",
           adresse: "5385 Continental Pass"
         },
         {
@@ -62,10 +78,10 @@ export default {
           first_name: "Lina",
           last_name: "Butland",
           email: "lbutland1@seattletimes.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "388-326-8254",
           postal_code: null,
-          room_number: "967",
+          room_number: "02",
           adresse: "296 Wayridge Place"
         },
         {
@@ -73,10 +89,10 @@ export default {
           first_name: "Richie",
           last_name: "Utridge",
           email: "rutridge2@businessinsider.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "170-939-7902",
           postal_code: "35047 CEDEX 9",
-          room_number: "68",
+          room_number: "03",
           adresse: "53861 Transport Avenue"
         },
         {
@@ -84,10 +100,10 @@ export default {
           first_name: "Carmina",
           last_name: "Conyers",
           email: "cconyers3@squarespace.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "899-143-6431",
           postal_code: null,
-          room_number: "796",
+          room_number: "04",
           adresse: "5 Helena Pass"
         },
         {
@@ -95,10 +111,10 @@ export default {
           first_name: "Hilde",
           last_name: "Clarae",
           email: "hclarae4@tripod.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "920-570-9391",
           postal_code: "61663",
-          room_number: "64051",
+          room_number: "05",
           adresse: "23143 Nova Park"
         },
         {
@@ -106,7 +122,7 @@ export default {
           first_name: "Alair",
           last_name: "Conquer",
           email: "aconquer5@cdbaby.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "254-953-7690",
           postal_code: null,
           room_number: "739",
@@ -117,7 +133,7 @@ export default {
           first_name: "Arther",
           last_name: "Biggam",
           email: "abiggam6@tinyurl.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "179-393-1266",
           postal_code: null,
           room_number: "094",
@@ -128,7 +144,7 @@ export default {
           first_name: "Kevyn",
           last_name: "Markova",
           email: "kmarkova7@goo.gl",
-          gender: "Female",
+          gender: "Mme",
           telephone: "898-794-4410",
           postal_code: null,
           room_number: "27",
@@ -139,7 +155,7 @@ export default {
           first_name: "Adore",
           last_name: "Finlow",
           email: "afinlow8@sourceforge.net",
-          gender: "Female",
+          gender: "Mme",
           telephone: "869-853-4854",
           postal_code: null,
           room_number: "8",
@@ -150,7 +166,7 @@ export default {
           first_name: "Tam",
           last_name: "Sanderson",
           email: "tsanderson9@seesaa.net",
-          gender: "Male",
+          gender: "Mr",
           telephone: "874-981-4325",
           postal_code: "G6E",
           room_number: "2280",
@@ -161,7 +177,7 @@ export default {
           first_name: "Darrel",
           last_name: "Izard",
           email: "dizarda@prnewswire.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "685-696-5451",
           postal_code: "2424",
           room_number: "417",
@@ -172,7 +188,7 @@ export default {
           first_name: "Geralda",
           last_name: "Swetenham",
           email: "gswetenhamb@kickstarter.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "139-915-9150",
           postal_code: "47849",
           room_number: "225",
@@ -183,7 +199,7 @@ export default {
           first_name: "Bradford",
           last_name: "Jevons",
           email: "bjevonsc@howstuffworks.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "381-605-6464",
           postal_code: "41-106",
           room_number: "9990",
@@ -194,7 +210,7 @@ export default {
           first_name: "Nina",
           last_name: "Aleavy",
           email: "naleavyd@yahoo.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "219-295-9567",
           postal_code: "424 31",
           room_number: "06",
@@ -205,7 +221,7 @@ export default {
           first_name: "Lyndsay",
           last_name: "Putland",
           email: "lputlande@theatlantic.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "316-535-7089",
           postal_code: "365-0024",
           room_number: "4477",
@@ -216,7 +232,7 @@ export default {
           first_name: "Kenton",
           last_name: "Flintuff",
           email: "kflintufff@uol.com.br",
-          gender: "Male",
+          gender: "Mr",
           telephone: "537-993-9648",
           postal_code: null,
           room_number: "12662",
@@ -227,7 +243,7 @@ export default {
           first_name: "Daphna",
           last_name: "Darco",
           email: "ddarcog@prnewswire.com",
-          gender: "Female",
+          gender: "Mme",
           telephone: "996-775-9558",
           postal_code: null,
           room_number: "85",
@@ -238,7 +254,7 @@ export default {
           first_name: "Gottfried",
           last_name: "Cochran",
           email: "gcochranh@engadget.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "727-433-5967",
           postal_code: "45201",
           room_number: "0056",
@@ -249,7 +265,7 @@ export default {
           first_name: "Ross",
           last_name: "Dunhill",
           email: "rdunhilli@yellowpages.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "208-304-1199",
           postal_code: null,
           room_number: "634",
@@ -260,7 +276,7 @@ export default {
           first_name: "Crichton",
           last_name: "Arnolds",
           email: "carnoldsj@csmonitor.com",
-          gender: "Male",
+          gender: "Mr",
           telephone: "387-961-7362",
           postal_code: null,
           room_number: "862",
@@ -276,6 +292,7 @@ export default {
 th,
 td {
   border-top: none;
+  vertical-align: middle;
 }
 
 th {

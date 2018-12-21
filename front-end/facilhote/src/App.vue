@@ -2,6 +2,7 @@
   <div id="app">
     <div>
       <Navbar></Navbar>
+      <Sidebar></Sidebar>
     </div>
     <main id="main-content">
       <router-view/>
@@ -11,9 +12,11 @@
 
 <script>
 import Navbar from "@/components/nav/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
 export default {
   components: {
-    Navbar: Navbar
+    Navbar: Navbar,
+    Sidebar: Sidebar
   }
 };
 </script>
