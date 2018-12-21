@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="table-responsive pt-5">
@@ -151,7 +150,7 @@ export default {
           adresse: "266 Buhler Drive"
         },
         {
-          id: 9,
+          i: 9,
           first_name: "Adore",
           last_name: "Finlow",
           email: "afinlow8@sourceforge.net",
@@ -227,7 +226,7 @@ export default {
           room_number: "4477",
           adresse: "2696 Bartelt Alley"
         },
-        {
+        
           id: 16,
           first_name: "Kenton",
           last_name: "Flintuff",
