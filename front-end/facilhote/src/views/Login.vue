@@ -3,14 +3,14 @@
     <div class="row">
       <div class="col-md-4 login-sec">
         <h2 class="text-center">Connexion</h2>
-        <form class="login-form">
+        <form class="login-form" @submit.prevent="login()">
           <div class="form-group">
             <label for="InputEmail" class="text-uppercase">Nom d'utilisateur</label>
-            <input id="InputEmail" type="email" class="form-control" placeholder>
+            <input id="InputEmail" v-model="email" type="email" class="form-control">
           </div>
           <div class="form-group">
             <label for="InputPassword" class="text-uppercase">Mot de passe</label>
-            <input id="InputPassword" type="password" class="form-control" placeholder>
+            <input id="InputPassword" v-model="password" type="password" class="form-control">
           </div>
 
           <div class="form-check">
@@ -63,15 +63,41 @@
 </template>
 
 <script>
-export default {};
+import { EventBus } from "./../event-bus.js";
+export default {
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    login() {
+      let email = this.email;
+      let password = this.password;
+      this.$store
+        .dispatch("login", { email, password })
+        .then(res => {
+          EventBus.$emit("message-from-app", {
+            txt: res.data.message,
+            status: "alert-success"
+          });
+          this.$router.push("/");
+        })
+        .catch(err => {
+          console.log(err);
+          EventBus.$emit("message-from-app", {
+            txt: "Votre email ou mot de passe n'est pas correct :(",
+            status: "alert-warning"
+          });
+        });
+    }
+  }
+};
 </script>
 
 <style scoped>
 .banner-sec {
-  background: url(https://static.pexels.com/photos/33972/pexels-photo.jpg)
-    no-repeat left bottom;
-  background-size: cover;
-  min-height: 500px;
   border-radius: 0 10px 10px 0;
   padding: 0;
 }
@@ -96,12 +122,6 @@ export default {};
   bottom: 20px;
   font-size: 13px;
   text-align: center;
-}
-.login-sec .copy-text i {
-  color: #feb58a;
-}
-.login-sec .copy-text a {
-  color: #e36262;
 }
 .login-sec h2 {
   margin-bottom: 30px;
@@ -149,5 +169,13 @@ export default {};
 }
 .banner-text p {
   color: #fff;
+}
+@media (max-width: 768px) {
+  .banner-sec {
+    border-radius: 0 0 10px 10px;
+  }
+  .carousel-inner {
+    border-radius: 0 0 10px 10px;
+  }
 }
 </style>

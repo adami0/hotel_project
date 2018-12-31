@@ -11,22 +11,22 @@
 
       <ul class="list-unstyled components">
         <li>
-          <a href="/">
+          <router-link to="/">
             <font-awesome-icon icon="tachometer-alt" size="lg"/>
             <span class="sidebar-category">Tableau de bord</span>
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="/calendar">
+          <router-link to="/calendar">
             <font-awesome-icon icon="calendar-alt" size="lg"/>
             <span class="sidebar-category">Réservations</span>
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="/client">
+          <router-link to="/client">
             <font-awesome-icon icon="user" size="lg"/>
             <span class="sidebar-category">Clients</span>
-          </a>
+          </router-link>
         </li>
         <li>
           <font-awesome-icon icon="credit-card" size="lg"/>
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       isActive: null,
-      navBar: null
+      sidebar: null
     };
   },
   mounted() {
