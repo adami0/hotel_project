@@ -1,11 +1,12 @@
 <template>
   <div id="error-page">
-    <img src="../assets/404.svg" alt="404 error page not found">
-    <div>
-      <h1 class="padding">Oops... mauvaise planète!</h1>
-      <p class="padding">Il semblerait que vous vous soyez trompé de planète,
+    <div class="page-text d-flex flex-column align-items-center pb-4">
+      <h2 class="mt-auto">Oops... mauvaise planète!</h2>
+      <p class="px-2">Il semblerait que vous vous soyez trompé de planète,
         échappez-vous ils arrivent.</p>
-      <button id="error-page-btn" @click="backToHome">Retour à l'accueil</button>
+      <button id="error-page-btn" @click="backToHome">
+        &#x1F680; Cliquez ici pour vous échapper &#x1F680;
+      </button>
     </div>
   </div>
 </template>
@@ -22,24 +23,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
+#error-page {
+  background: url(../assets/404.svg) center / contain no-repeat;
+  height: calc(100vh - 55px);
   width: 100%;
-  height: 500px;
 }
-@media screen and (max-width: 1200px) {
-  img {
-    width: 100%;
-    height: auto;
-  }
-}
-.padding {
-  padding: 0 10px;
+.page-text {
+  height: 100%;
 }
 #error-page-btn {
   color: #fff;
-  text-transform: uppercase;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: .8rem;
   font-weight: bold;
   padding: 15px 30px 15px 30px;
   margin-top: 20px;

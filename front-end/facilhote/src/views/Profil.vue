@@ -1,6 +1,15 @@
 <template>
   <div class="container my-5">
-    <div class="row m-y-2">
+    <div class="row my-2">
+      <div class="col-lg-4 pull-lg-8 text-xs-center">
+        <img src="//placehold.it/150" class="rounded mx-auto d-block" alt="avatar">
+        <h6 class="my-3">Upload a different photo</h6>
+        <form>
+          <div class="form-group">
+            <input type="file" class="form-control-file">
+          </div>
+        </form>
+      </div>
       <div class="col-lg-8 push-lg-4">
         <ul class="nav nav-tabs">
           <li class="nav-item">
@@ -13,9 +22,9 @@
             <a href data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
           </li>
         </ul>
-        <div class="tab-content p-b-3">
+        <div class="tab-content pb-3">
           <div class="tab-pane active" id="profile">
-            <h4 class="m-y-2">User Profile</h4>
+            <h4 class="my-2">User Profile</h4>
             <div class="row">
               <div class="col-md-6">
                 <h6>About</h6>
@@ -27,12 +36,6 @@
                 <h6>Recent Tags</h6>
                 <a href class="tag tag-default tag-pill">html5</a>
                 <a href class="tag tag-default tag-pill">react</a>
-                <a href class="tag tag-default tag-pill">codeply</a>
-                <a href class="tag tag-default tag-pill">angularjs</a>
-                <a href class="tag tag-default tag-pill">css3</a>
-                <a href class="tag tag-default tag-pill">jquery</a>
-                <a href class="tag tag-default tag-pill">bootstrap</a>
-                <a href class="tag tag-default tag-pill">responsive-design</a>
                 <hr>
                 <span class="tag tag-primary">
                   <i class="fa fa-user"></i> 900 Followers
@@ -45,7 +48,7 @@
                 </span>
               </div>
               <div class="col-md-12">
-                <h4 class="m-t-2">
+                <h4 class="mt-2">
                   <span class="fa fa-clock-o ion-clock pull-xs-right"></span> Recent Activity
                 </h4>
                 <table class="table table-hover table-striped">
@@ -87,7 +90,7 @@
             <!--/row-->
           </div>
           <div class="tab-pane" id="messages">
-            <h4 class="m-y-2">Recent Messages &amp; Notifications</h4>
+            <h4 class="my-2">Recent Messages &amp; Notifications</h4>
             <div class="alert alert-info alert-dismissable">
               <a class="panel-close close" data-dismiss="alert">×</a> This is an
               <strong>.alert</strong>. Use this to show important messages to the user.
@@ -96,29 +99,34 @@
               <tbody>
                 <tr>
                   <td>
-                    <span class="pull-xs-right font-weight-bold">3 hrs ago</span> Here is your a link to the latest summary report from the..
+                    <span class="pull-xs-right font-weight-bold">3 hrs ago</span>
+                    Here is your a link to the latest summary report from the..
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span class="pull-xs-right font-weight-bold">Yesterday</span> There has been a request on your account since that was..
+                    <span class="pull-xs-right font-weight-bold">Yesterday</span>
+                    There has been a request on your account since that was..
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span class="pull-xs-right font-weight-bold">9/10</span> Porttitor vitae ultrices quis, dapibus id dolor. Morbi venenatis lacinia rhoncus.
+                    <span class="pull-xs-right font-weight-bold">9/10</span>
+                    Porttitor vitae ultrices quis, dapibus id dolor.
+                    Morbi venenatis lacinia rhoncus.
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span class="pull-xs-right font-weight-bold">9/4</span> Vestibulum tincidunt ullamcorper eros eget luctus.
+                    <span class="pull-xs-right font-weight-bold">9/4</span>
+                    Vestibulum tincidunt ullamcorper eros eget luctus.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="tab-pane" id="edit">
-            <h4 class="m-y-2">Edit Profile</h4>
+            <h4 class="my-2">Edit Profile</h4>
             <form role="form">
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">First name</label>
@@ -217,14 +225,6 @@
             </form>
           </div>
         </div>
-      </div>
-      <div class="col-lg-4 pull-lg-8 text-xs-center">
-        <img src="//placehold.it/150" class="m-x-auto img-fluid img-circle" alt="avatar">
-        <h6 class="m-t-2">Upload a different photo</h6>
-        <label class="custom-file">
-          <input type="file" id="file" class="custom-file-input">
-          <span class="custom-file-control">Choose file</span>
-        </label>
       </div>
     </div>
   </div>

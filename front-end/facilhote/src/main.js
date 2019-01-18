@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faHome, faBars, faCaretDown, faChild, faAt, faGlobe, faPhone, faMoon, faCalendarAlt,
@@ -19,6 +20,12 @@ library.add(
   faUser, faCreditCard, faChartBar, faExclamationTriangle,
   faArchive, faCog, faPowerOff, faTimes,
 );
+
+Vue.prototype.$http = Axios;
+const token = localStorage.getItem('token');
+if (token) {
+  Vue.prototype.$http.defaults.headers.common.Authorization = token;
+}
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div>
-      <Navbar></Navbar>
-      <Sidebar></Sidebar>
+      <Navbar/>
+      <Sidebar/>
     </div>
+    <alert-message/>
     <main id="main-content">
       <router-view/>
     </main>
@@ -11,12 +12,24 @@
 </template>
 
 <script>
-import Navbar from "@/components/nav/Navbar";
-import Sidebar from "@/components/sidebar/Sidebar";
+import AlertMessage from "@/components/alertMessage/AlertMessage.vue";
+import Navbar from "@/components/nav/Navbar.vue";
+import Sidebar from "@/components/sidebar/Sidebar.vue";
 export default {
   components: {
-    Navbar: Navbar,
-    Sidebar: Sidebar
+    Navbar,
+    Sidebar,
+    AlertMessage
+  },
+  created: function() {
+    this.$http.interceptors.response.use(undefined, function(err) {
+      return new Promise(function(resolve, reject) {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch(logout);
+        }
+        throw err;
+      });
+    });
   }
 };
 </script>
