@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/vue-fontawesome": "^0.1.2",
     "axios": "^0.18.0",
+    "dhtmlx-scheduler": "^5.1.6",
     "moment": "^2.23.0",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",
