@@ -26,7 +26,7 @@
         </a>
       </div>
 
-      <router-link class="py-3 px-3 nav-bg_color border-left text-white" to="/">
+      <router-link class="py-3 px-3 nav-bg_color border-left text-white home" to="/">
         <font-awesome-icon icon="home" size="lg"/>
       </router-link>
 
@@ -88,5 +88,14 @@ export default {
 .dropdown-item:active,
 .dropdown-item:hover {
   background: #8d7154;
+}
+@media screen and (max-width: 420px) {
+  .nav-bg_color.home {
+    display: none;
+  }
+  .nav-bg_color.font-weight-normal {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
 }
 </style>

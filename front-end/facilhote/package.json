@@ -12,8 +12,10 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/vue-fontawesome": "^0.1.2",
+    "@syncfusion/ej2-base": "^16.4.52",
+    "@syncfusion/ej2-vue-schedule": "^16.4.53",
     "axios": "^0.18.0",
-    "dhtmlx-scheduler": "^5.1.6",
+    "cldr-data": "^34.0.0",
     "moment": "^2.23.0",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",
@@ -31,6 +33,7 @@
     "chai": "^4.1.2",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
+    "systemjs-plugin-json": "^0.3.0",
     "vue-template-compiler": "^2.5.17"
   }
 }
