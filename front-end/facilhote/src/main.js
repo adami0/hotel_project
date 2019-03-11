@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Axios from 'axios';
+import { SchedulePlugin } from '@syncfusion/ej2-vue-schedule';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faHome, faBars, faCaretDown, faChild, faAt, faGlobe, faPhone, faMoon, faCalendarAlt,
@@ -28,7 +29,7 @@ if (token) {
 }
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
+Vue.use(SchedulePlugin);
 Vue.config.productionTip = false;
 
 new Vue({

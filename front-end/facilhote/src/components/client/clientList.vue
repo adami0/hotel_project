@@ -226,7 +226,7 @@ export default {
           room_number: "4477",
           adresse: "2696 Bartelt Alley"
         },
-        
+        {
           id: 16,
           first_name: "Kenton",
           last_name: "Flintuff",

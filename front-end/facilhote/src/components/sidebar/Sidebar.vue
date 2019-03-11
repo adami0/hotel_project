@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="isLoggedIn">
     <nav id="sidebar">
       <div class="sidebar-header">
         <img src="./../../assets/logofh.png" title="logo_facil_hote">
@@ -68,6 +68,11 @@ export default {
   },
   mounted() {
     this.sidebar = this.$el.querySelector("#sidebar");
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    }
   },
   created() {
     EventBus.$on("toggle-sidebar", status => {
