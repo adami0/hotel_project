@@ -61,7 +61,7 @@ export default {
   -webkit-animation-name: message; /* Safari 4.0 - 8.0 */
   -webkit-animation-duration: 0.5s;
 }
-@-webkit-keyframes example {
+@-webkit-keyframes message {
   0% {
     right: -50%;
   }
