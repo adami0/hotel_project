@@ -1,5 +1,7 @@
 <template>
-  <span class="month">{{getMonthDetails(data)}}</span>
+  <div class="template-wrap" :style="{background: data.PrimaryColor}">
+    <div class="subject" :style="{background: data.SecondaryColor}">{{data.Subject}}</div>
+  </div>
 </template>
 
 <script>
@@ -8,11 +10,6 @@ export default {
     return {
       data: {}
     };
-  },
-  methods: {
-    getMonthDetails(value) {
-      return instance.formatDate(value.date, { skeleton: "yMMMM" });
-    }
   }
 };
 </script>

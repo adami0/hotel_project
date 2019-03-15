@@ -18,7 +18,7 @@ import Sidebar from "@/components/sidebar/Sidebar.vue";
 import { loadCldr, L10n, setCulture } from "@syncfusion/ej2-base";
 
 import * as numberingSystems from "./../node_modules/cldr-data/supplemental/numberingSystems.json";
-import * as localeText from "./../locale.json";
+import * as localeText from "./locale.json";
 import * as gregorian from "./../node_modules/cldr-data/main/fr/ca-gregorian.json";
 import * as numbers from "./../node_modules/cldr-data/main/fr/numbers.json";
 import * as timeZoneNames from "./../node_modules/cldr-data/main/fr/timeZoneNames.json";

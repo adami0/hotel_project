@@ -1,5 +1,5 @@
 {
-  "fr": {
+  "fr_FR": {
     "schedule": {
       "day": "Jour",
       "week": "Semaine",
@@ -29,14 +29,14 @@
       "editEvent": "Edit Event",
       "createEvent": "Créer",
       "subject": "Subject",
-      "addTitle": "Add title",
+      "addTitle": "Ajouter un Titre",
       "moreDetails": "More Details",
       "save": "Save",
       "editContent": "Do you want to edit only this event or entire series?",
       "deleteRecurrenceContent": "Do you want to delete only this event or entire series?",
       "deleteContent": "Are you sure you want to delete this event?",
       "deleteMultipleContent": "Are you sure you want to delete the selected events?",
-      "newEvent": "New Event",
+      "newEvent": "Nouveau Evenement",
       "title": "Title",
       "location": "Location",
       "description": "Description",

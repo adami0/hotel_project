@@ -32,6 +32,7 @@
     "express-boom": "^2.0.0",
     "helmet": "^3.15.0",
     "jsonwebtoken": "^8.4.0",
+    "moment": "^2.24.0",
     "multer": "^1.4.1",
     "mysql2": "^1.6.4",
     "swagger-ui-express": "^4.0.2",

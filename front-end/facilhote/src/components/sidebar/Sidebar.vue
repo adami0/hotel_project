@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="isLoggedIn">
+  <div class="wrapper" v-if="isLoggedIn" v-click-outside="closeSideBar">
     <nav id="sidebar">
       <div class="sidebar-header">
         <img src="./../../assets/logofh.png" title="logo_facil_hote">
@@ -59,6 +59,7 @@
 
 <script>
 import { EventBus } from "./../../event-bus.js";
+
 export default {
   data() {
     return {
@@ -71,7 +72,7 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters["users/isLoggedIn"];
     }
   },
   created() {
@@ -87,6 +88,29 @@ export default {
       } else {
         this.sidebar.classList.remove("active");
       }
+    },
+    closeSideBar(event) {
+      if (this.isActive) {
+        this.sidebar.classList.remove("active");
+        EventBus.$emit("hide-sidebar", false);
+      }
+    }
+  },
+  directives: {
+    clickOutside: {
+      bind(el, binding, vnode) {
+        el.clickOutsideEvent = function(event) {
+          if (!(el === event.target || el.contains(event.target))) {
+            if (vnode.context.isActive) {
+              vnode.context[binding.expression](event);
+            }
+          }
+        };
+        document.body.addEventListener("click", el.clickOutsideEvent);
+      },
+      unbind(el) {
+        document.body.removeEventListener("click", el.clickOutsideEvent);
+      }
     }
   }
 };
@@ -100,7 +124,6 @@ a:hover {
   display: block;
   height: 100%;
   text-decoration: none;
-  transition: all 0.3s;
   width: 100%;
 }
 
@@ -111,13 +134,16 @@ a:hover {
   left: -250px;
   position: fixed;
   top: 0;
-  transition: all 0.3s;
+  -webkit-transition: left 0.5s;
+  transition: left 0.5s;
   width: 200px;
   z-index: 999;
 }
 
 #sidebar.active {
   left: 0;
+  -webkit-transition: left 0.6s;
+  transition: left 0.6s;
 }
 
 #sidebar .sidebar-header {

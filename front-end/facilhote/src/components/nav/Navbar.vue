@@ -30,7 +30,11 @@
         <font-awesome-icon icon="home" size="lg"/>
       </router-link>
 
-      <a class="py-3 px-3 nav-bg_color border-left text-white" @click="toggleSideBar()">
+      <a
+        id="sideBarBtn"
+        class="py-3 px-3 nav-bg_color border-left text-white"
+        @click.stop="toggleSideBar()"
+      >
         <font-awesome-icon :icon="['fa', activeIcon ]" size="lg"/>
       </a>
     </nav>
@@ -46,9 +50,15 @@ export default {
       activeIcon: "bars"
     };
   },
+  created() {
+    EventBus.$on("hide-sidebar", status => {
+      this.isActive = status;
+      this.activeIcon = this.isActive ? "times" : "bars";
+    });
+  },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters["users/isLoggedIn"];
     }
   },
   methods: {
@@ -58,7 +68,7 @@ export default {
       EventBus.$emit("toggle-sidebar", this.isActive);
     },
     logout() {
-      this.$store.dispatch("logout").then(() => {
+      this.$store.dispatch("users/logout").then(() => {
         this.$router.push("/login");
       });
     }
