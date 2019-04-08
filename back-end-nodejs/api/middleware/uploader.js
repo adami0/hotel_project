@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
 });
 
 const filter = (req, file, clbk) => {
-  // console.log("in file filter + file);
+  //console.log('in file filter + file');
 
   if (!file.mimetype.match("image/")) {
     clbk(null, false);

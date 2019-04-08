@@ -20,7 +20,7 @@ router.get('/', checkAuth, (req, res, next) => {
  */
 router.patch('/:id', checkAuth, (req, res, next) => {
   roomsModel.updateRoomStatus((response) => {
-    res.status(201).send(response);
+    res.status(201).send(response.message);
   }, req.body, req.params.id);
 });
 

@@ -5,7 +5,7 @@
         <h2 class="text-center">Connexion</h2>
         <form class="login-form" @submit.prevent="login()">
           <div class="form-group">
-            <label for="InputEmail" class="text-uppercase">Nom d'utilisateur</label>
+            <label for="InputEmail" class="text-uppercase">Email</label>
             <input id="InputEmail" v-model="email" type="email" class="form-control">
           </div>
           <div class="form-group">
@@ -14,10 +14,6 @@
           </div>
 
           <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
-              <small>Se souvenir de moi</small>
-            </label>
             <button type="submit" class="btn btn-login float-right px-5">Submit</button>
           </div>
         </form>
@@ -67,8 +63,8 @@ import { EventBus } from "./../event-bus.js";
 export default {
   data() {
     return {
-      email: "",
-      password: ""
+      email: "test2@test.com",
+      password: "test"
     };
   },
   methods: {
@@ -86,10 +82,17 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          EventBus.$emit("message-from-app", {
-            txt: "Votre email ou mot de passe n'est pas correct :(",
-            status: "alert-warning"
-          });
+          if (err.message === "Network Error") {
+            EventBus.$emit("message-from-app", {
+              txt: "Connexion au serveur impossible ⚠️",
+              status: "alert-warning"
+            });
+          } else {
+            EventBus.$emit("message-from-app", {
+              txt: "Votre email ou mot de passe n'est pas correct 🤖",
+              status: "alert-warning"
+            });
+          }
         });
     }
   }

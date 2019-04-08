@@ -1,12 +1,11 @@
 import Vue from 'vue';
-import Axios from 'axios';
+import axios from 'axios';
 import { SchedulePlugin } from '@syncfusion/ej2-vue-schedule';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faHome, faBars, faCaretDown, faChild, faAt, faGlobe, faPhone, faMoon, faCalendarAlt,
-  faBed, faSearch, faUsers, faHourglassHalf, faCaretRight, faCaretLeft, faTachometerAlt,
-  faUser, faCreditCard, faChartBar, faExclamationTriangle, faArchive, faCog, faPowerOff,
-  faTimes,
+  faHome, faCaretDown, faUser, faPlusCircle, faCalendarAlt,
+  faBroom, faBed, faDoorOpen, faTimes, faCheckCircle, faPowerOff,
+  faTimesCircle, faEdit, faTrashAlt, faKey, faList,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './App.vue';
@@ -15,17 +14,15 @@ import store from './store';
 import './registerServiceWorker';
 
 library.add(
-  faHome, faBars, faCaretDown, faCaretRight, faCaretLeft,
-  faSearch, faUsers, faHourglassHalf, faBed, faCalendarAlt,
-  faMoon, faChild, faAt, faPhone, faGlobe, faTachometerAlt,
-  faUser, faCreditCard, faChartBar, faExclamationTriangle,
-  faArchive, faCog, faPowerOff, faTimes,
+  faHome, faCaretDown, faUser, faBed, faBroom, faPlusCircle, faPowerOff,
+  faCalendarAlt, faDoorOpen, faTimes, faCheckCircle, faTimesCircle, faEdit,
+  faTrashAlt, faKey, faList,
 );
 
-Vue.prototype.$http = Axios;
-const token = localStorage.getItem('token');
+Vue.prototype.$http = axios;
+const token = localStorage.getItem('user-token');
 if (token) {
-  Vue.prototype.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

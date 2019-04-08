@@ -1,13 +1,11 @@
 <template>
   <div class="wrapper" v-if="isLoggedIn" v-click-outside="closeSideBar">
-    <nav id="sidebar">
+    <nav id="sidebar" ref="sideBar">
       <div class="sidebar-header">
         <img src="./../../assets/logofh.png" title="logo_facil_hote">
       </div>
 
-      <div class="sidebar-user">Bonjour à vous
-        <br>Admin User
-      </div>
+      <div class="sidebar-user">Bienvenue {{ $store.state.users.user.username }}</div>
 
       <ul class="list-unstyled components">
         <li>
@@ -68,7 +66,7 @@ export default {
     };
   },
   mounted() {
-    this.sidebar = this.$el.querySelector("#sidebar");
+    this.sidebar = this.$refs.sideBar;
   },
   computed: {
     isLoggedIn() {

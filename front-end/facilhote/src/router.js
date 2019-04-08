@@ -22,9 +22,9 @@ const router = new Router({
       component: () => import('./views/Login.vue'),
     },
     {
-      path: '/profil',
-      name: 'profil',
-      component: () => import('./views/Profil.vue'),
+      path: '/profile',
+      name: 'profile',
+      component: () => import('./views/Profile.vue'),
       meta: {
         requiresAuth: true,
         // is_admin: true,

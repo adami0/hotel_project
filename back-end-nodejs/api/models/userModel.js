@@ -1,22 +1,37 @@
 'use strict';
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 const mysql = require('./../db/mysql');
-
 
 const getUser = (clbk, id) => {
   var q;
 
-  if (id) q = `SELECT id, email, avatar, about, is_admin FROM user WHERE id = ${mysql.escape(id)}`;
-  else q = 'SELECT id, email, avatar, about, is_admin FROM user';
+  if (id) {
+    q = `SELECT
+            id, email, avatar, about, is_admin
+        FROM
+            user
+        WHERE
+            id = ${mysql.escape(id)}`;
+  } else {
+    q = `SELECT id, username, email, avatar, created_at, about, is_admin FROM user`;
+  }
 
   mysql.query(q, (error, results, fields) => {
     if (error) throw error; // en cas d'erreur, une exception est levée
+    if (results[0].created_at) {
+      for (var i = 0; i < results.length; i++) {
+        results[i].created_at = moment(results[i].created_at).format('L');
+      }
+    }
     clbk(results); // on passe les résultats de la requête en argument de la fonction callback
   });
 };
 
 const checkMail = (clbk, email) => {
-  const q = `SELECT COUNT(*) as count FROM user WHERE email = ${mysql.escape(email)}`;
+  const q = `SELECT COUNT(*) as count FROM user WHERE email = ${mysql.escape(
+    email
+  )}`;
 
   mysql.query(q, (error, results, fields) => {
     if (error) throw error; // en cas d'erreur, une exception est levée
@@ -26,20 +41,31 @@ const checkMail = (clbk, email) => {
 
 const register = (clbk, data) => {
   checkMail(res => {
-    if (res[0].count > 0) { // cette adresse mail est déjà en base
-      return clbk({error: true, message: "un compte avec le même email existe déjà. veuillez saisir un email différent"});
-    }
+    if (res[0].count > 0) {
+      // cette adresse mail est déjà en base
+      return clbk({
+        error: true,
+        message:
+          'un compte avec le même email existe déjà. veuillez saisir un email différent',
+      });
+    };
     // la base ne contient pas encore cette adresse mail, poursuivons l'insertion
     const hash = bcrypt.hashSync(data.password, 10);
-    const q = `INSERT INTO user (username, email, password) VALUES
-      (${mysql.escape(data.username)}, ${mysql.escape(data.email)}, ${mysql.escape(hash)})`;
+    const q = `INSERT INTO
+                  user (username, email, password)
+              VALUES
+                  (
+                  ${mysql.escape(data.username)},
+                  ${mysql.escape(data.email)},
+                  ${mysql.escape(hash)}
+                  )`;
 
-      mysql.query(q, (error, results, fields) => {
-        if (error) throw error;
-        results.error = false;
-        results.message = "vous êtes bien enregistré, veuillez vous connecter.";
-        clbk(results);
-      });
+    mysql.query(q, (error, results, fields) => {
+      if (error) throw error;
+      results.error = false;
+      results.message = 'vous êtes bien enregistré, veuillez vous connecter.';
+      clbk(results);
+    });
   }, data.email);
 };
 
@@ -49,11 +75,10 @@ const remove = (clbk, id) => {
   mysql.query(q, (error, results, fields) => {
     if (error) throw error; // en cas d'erreur, une exception est levée
     results.error = false;
-    results.message = "L'utilisateur à été supprimé succès";
+    results.message = "L'utilisateur à été supprimé avec succès";
     clbk(results); // on passe les résultats de la requête en argument de la fonction callback
   });
 };
-
 
 // Helper method for validating user's password
 const comparePassword = (email, clbk) => {
@@ -66,13 +91,13 @@ const comparePassword = (email, clbk) => {
 
     if (Array.isArray(tmp) && !tmp.length) {
       resp.error = true;
-      resp.message = "Email ou mot de passe invalid";
+      resp.message = 'Email ou mot de passe invalid';
     } else {
       resp.password = tmp.password;
       resp.error = true;
     }
-    clbk(resp)
-  })
+    clbk(resp);
+  });
 };
 
 const authenticate = (clbk, data) => {
@@ -80,35 +105,47 @@ const authenticate = (clbk, data) => {
     if (res.password) {
       bcrypt.compare(data.password, res.password, (error, result) => {
         if (result) {
-          const q = `SELECT id, username, email, avatar, about, is_admin FROM user WHERE email = ${mysql.escape(data.email)} AND password = ${mysql.escape(res.password)} GROUP BY id`;
+          const q = `SELECT
+                        id, username, email, avatar, about, is_admin
+                    FROM
+                        user
+                    WHERE
+                        email = ${mysql.escape(data.email)}
+                    AND
+                        password = ${mysql.escape(res.password)} GROUP BY id`;
 
-            mysql.query(q, (error, results, fields) => {
+          mysql.query(q, (error, results, fields) => {
+            if (error) throw error;
 
-              if (error) throw error;
+            const tmp = results[0] || results;
 
-              const tmp = results[0] || results;
-
-              res.user = tmp;
-              res.error = false;
-              res.password = null;
-              res.message = "Vous êtes maintenant connecté";
-              clbk(res)
-           });
+            res.user = tmp;
+            res.error = false;
+            delete res.password;
+            res.message = 'Vous êtes maintenant connecté';
+            clbk(res);
+          })
         } else {
           res.error = true;
-          res.password = null;
-          res.message = "Email ou mot de passe invalid";
-          clbk(res)
+          delete res.password;
+          res.message = 'Email ou mot de passe invalid';
+          clbk(res);
         }
       });
     } else {
-      clbk(res)
+      clbk(res);
     }
-  })
+  });
 };
 
 const patchAbout = (clbk, about, id) => {
-  const q = `UPDATE user SET about = ${mysql.escape(about)} WHERE id = ${mysql.escape(id)}`;
+  const q = `UPDATE
+                user
+            SET
+                about = ${mysql.escape(about)}
+            WHERE
+                id = ${mysql.escape(id)}`;
+
   mysql.query(q, (error, results, fields) => {
     if (error) throw error;
     clbk(results);
@@ -116,7 +153,13 @@ const patchAbout = (clbk, about, id) => {
 };
 
 const patchAvatar = (clbk, avatar, id) => {
-  const q = `UPDATE user SET avatar = ${mysql.escape(avatar)} WHERE id = ${mysql.escape(id)}`;
+  const q = `UPDATE
+                user
+            SET
+                avatar = ${mysql.escape(avatar)}
+            WHERE
+                id = ${mysql.escape(id)}`;
+
   mysql.query(q, (error, results, fields) => {
     if (error) throw error;
     clbk(results);
@@ -131,5 +174,5 @@ module.exports = {
     about: patchAbout,
     avatar: patchAvatar,
   },
-  remove
-}
+  remove,
+};

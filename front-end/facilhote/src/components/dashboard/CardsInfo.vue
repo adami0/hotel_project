@@ -7,7 +7,8 @@
         </div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
-            <font-awesome-icon icon="bed" size="lg"/>0
+            <font-awesome-icon icon="door-open" size="lg"/>
+            {{ freeRooms }}
           </h1>
         </div>
       </div>
@@ -17,7 +18,8 @@
         </div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
-            <font-awesome-icon icon="users" size="lg"/>15
+            <font-awesome-icon icon="bed" size="lg"/>
+            {{ todayBookings }}
           </h1>
         </div>
       </div>
@@ -27,7 +29,8 @@
         </div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
-            <font-awesome-icon icon="hourglass-half" size="lg"/>29
+            <font-awesome-icon icon="broom" size="lg"/>
+            {{ cleaningRooms }}
           </h1>
         </div>
       </div>
@@ -35,6 +38,26 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-</style>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    freeRooms: {
+      type: Number,
+      required: true
+    },
+    todayBookings: {
+      type: Number,
+      required: true
+    },
+    cleaningRooms: {
+      type: Number,
+      required: true
+    }
+  }
+};
+</script>
+
 
