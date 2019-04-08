@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      completedSteps: 0,
+      completedSteps: 5,
       totalSteps: 10
     };
   },
