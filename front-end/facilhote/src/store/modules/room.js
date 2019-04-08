@@ -1,17 +1,12 @@
 import axios from 'axios';
 
 const state = {
-  roomData: '',
-  roomStatus: null,
+  roomsData: [] || JSON.parse(localStorage.getItem('rooms-data')),
 };
 
 const mutations = {
-  setRooms(state, roomData) {
-    state.roomData = roomData;
-  },
-
-  updateRoomStatus(state, roomStatus) {
-    state.roomStatus = roomStatus;
+  getAllRooms(state, data) {
+    state.roomsData = data;
   },
 };
 
@@ -20,8 +15,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios({ url: 'http://localhost:3000/api/v1/rooms', method: 'GET' })
         .then((resp) => {
-          const { data } = resp.data;
-          commit('setRooms', data);
+          const { data } = resp;
+          localStorage.setItem('rooms-data', JSON.stringify(data));
+          commit('getAllRooms', data);
           resolve(resp);
         })
         .catch((err) => {
@@ -30,12 +26,29 @@ const actions = {
     });
   },
 
-  updateRoomStatus({ commit }, roomStatus, roomId) {
+  deleteRoom({ dispatch }, roomId) {
     return new Promise((resolve, reject) => {
-      axios({ url: `http://localhost:3000/api/v1/rooms/${roomId}`, data: roomStatus, method: 'POST' })
+      axios({ url: `http://localhost:3000/api/v1/rooms/${roomId}`, method: 'DELETE' })
         .then((resp) => {
-          const { data } = resp;
-          commit('setRooms', data);
+          dispatch('getRoomsData');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  updateRoomStatus({ dispatch }, roomStatusData) {
+    return new Promise((resolve, reject) => {
+      const { roomStatus, roomId } = roomStatusData;
+      axios({
+        url: `http://localhost:3000/api/v1/rooms/${roomId}`,
+        data: { room_status: roomStatus },
+        method: 'PATCH',
+      })
+        .then((resp) => {
+          dispatch('getRoomsData');
           resolve(resp);
         })
         .catch((err) => {
@@ -45,7 +58,9 @@ const actions = {
   },
 };
 
-const getters = {};
+const getters = {
+  roomsData: state => state.roomsData,
+};
 
 export default {
   namespaced: true,

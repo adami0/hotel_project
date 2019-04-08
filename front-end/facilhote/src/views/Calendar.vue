@@ -6,32 +6,34 @@
         ref="ScheduleObj"
         :cssClass="cssClass"
         width="100%"
-        height="650px"
+        height="635px"
         :locale="locale"
         :selectedDate="selectedDate"
         :currentView="currentView"
+        :popupOpen="onPopupOpen"
+        :timeScale="timeScale"
         :eventSettings="eventSettings"
         :group="group"
         :resourceHeaderTemplate="resourceHeaderTemplate"
-        :popupOpen="onPopupOpen"
-        :eventRendered="onEventRendered"
         :actionBegin="onActionBegin"
         :renderCell="onRenderCell"
       >
         <e-views>
-          <e-view option="TimelineDay"></e-view>
-          <e-view option="TimelineWeek"></e-view>
-          <e-view option="TimelineMonth"></e-view>
+          <e-view
+            option="TimelineMonth"
+            :eventTemplate="monthTemplate"
+            :allowVirtualScrolling="virtualScroll"
+          ></e-view>
         </e-views>
         <e-resources>
           <e-resource
             field="RoomId"
             title="Room Type"
-            name="MeetingRoom"
+            name="Rooms"
             allowMultiple="true"
-            :dataSource="meetingRoomDataSource"
-            textField="text"
-            idField="id"
+            :dataSource="roomDataSource"
+            textField="room_nb"
+            idField="id_room"
             colorField="color"
           ></e-resource>
         </e-resources>
@@ -41,24 +43,26 @@
 </template>
 
 <script>
-import resourceHeaderVue from "@/components/calendar/ResourceHeader";
-import { extend, isNullOrUndefined, loadCldr } from "@syncfusion/ej2-base";
-import { roomData } from "./../datasource";
 import {
-  SchedulePlugin,
-  TimelineViews,
   TimelineMonth,
   Resize,
   DragAndDrop
 } from "@syncfusion/ej2-vue-schedule";
+import { extend, isNullOrUndefined, loadCldr } from "@syncfusion/ej2-base";
+import resourceHeaderVue from "@/components/calendar/ResourceHeader";
+import monthTempVue from "@/components/calendar/MonthHeader";
+import { EventBus } from "./../event-bus";
+import { roomData } from "./../datasource";
 
 export default {
   data() {
     return {
       cssClass: "room-scheduler",
       locale: "fr",
+      virtualScroll: true,
       eventSettings: {
-        dataSource: extend([], roomData, null, true),
+        dataSource: roomData,
+        enableTooltip: true,
         fields: {
           id: "Id",
           subject: { title: "Nom", name: "Subject" },
@@ -68,89 +72,30 @@ export default {
           endTime: { title: "jusqu'à", name: "EndTime" }
         }
       },
-      selectedDate: new Date(2018, 7, 1),
-      currentView: "TimelineWeek",
-      // workHours: { start: "08:00", end: "18:00" },
-      // timeScale: { interval: 60, slotCount: 1 },
-      resourceHeaderTemplate: function(e) {
+      selectedDate: new Date(),
+      timeScale: { enable: true, interval: 60, slotCount: 1 },
+      currentView: "TimelineMonth",
+      monthTemplate(e) {
+        return {
+          template: monthTempVue
+        };
+      },
+      resourceHeaderTemplate(e) {
         return {
           template: resourceHeaderVue
         };
       },
       group: {
         enableCompactView: false,
-        resources: ["MeetingRoom"]
-      },
-      meetingRoomDataSource: [
-        {
-          text: "101",
-          id: 1,
-          color: "#ea7a57",
-          state: 20,
-          type: "Simple"
-        },
-        { text: "102", id: 2, color: "#7fa900", state: 7, type: "Triple" },
-        { text: "103", id: 3, color: "#5978ee", state: 5, type: "Simple" },
-        {
-          text: "104",
-          id: 4,
-          color: "#fec200",
-          state: 15,
-          type: "Double"
-        },
-        {
-          text: "201",
-          id: 5,
-          color: "#df5286",
-          state: 25,
-          type: "Simple"
-        },
-        {
-          text: "202",
-          id: 6,
-          color: "#00bdae",
-          state: 10,
-          type: "Triple"
-        },
-        {
-          text: "203",
-          id: 7,
-          color: "#865fcf",
-          state: 20,
-          type: "Simple"
-        },
-        {
-          text: "204",
-          id: 8,
-          color: "#1aaa55",
-          state: 8,
-          type: "Triple"
-        },
-        {
-          text: "301",
-          id: 9,
-          color: "#df5286",
-          state: 30,
-          type: "Double"
-        },
-        {
-          text: "302",
-          id: 10,
-          color: "#710193",
-          state: 25,
-          type: "Double"
-        }
-      ]
+        resources: ["Rooms"]
+      }
     };
   },
   provide: {
-    schedule: [TimelineViews, TimelineMonth, Resize, DragAndDrop]
+    schedule: [TimelineMonth, Resize, DragAndDrop]
   },
   methods: {
-    isReadOnly: function(endDate) {
-      return endDate < new Date(2018, 6, 31, 0, 0);
-    },
-    onPopupOpen: function(args) {
+    onPopupOpen(args) {
       let data = args.data;
       if (
         args.type === "QuickInfo" ||
@@ -177,45 +122,37 @@ export default {
           ) {
             args.cancel = true;
           }
-        } else if (
-          !isNullOrUndefined(target) &&
-          target.classList.contains("e-appointment") &&
-          this.isReadOnly(data.EndTime)
-        ) {
-          args.cancel = true;
         }
       }
     },
-    onRenderCell: function(args) {
-      if (args.element.classList.contains("e-work-cells")) {
-        if (args.date < new Date(2018, 6, 31, 0, 0)) {
-          args.element.setAttribute("aria-readonly", "true");
-          args.element.classList.add("e-read-only-cells");
-        }
-      }
+    onRenderCell(args) {
       if (
         args.elementType === "emptyCells" &&
         args.element.classList.contains("e-resource-left-td")
       ) {
+        this.$store
+          .dispatch("reservations/getReservationData")
+          .then(response => {
+            console.log(response);
+            //this.eventSettings.dataSource = response.data;
+          });
         let target = args.element.querySelector(".e-resource-text");
         target.innerHTML =
           '<div class="name">Chambres</div><div class="type">Type</div><div class="state">État</div>';
       }
     },
-    onEventRendered: function(args) {
-      if (this.isReadOnly(args.data.EndTime)) {
-        args.element.setAttribute("aria-readonly", "true");
-        args.element.classList.add("e-read-only");
-      }
-    },
-    onActionBegin: function(args) {
+    onActionBegin(args) {
+      console.log(args);
       if (
         args.requestType === "eventCreate" ||
         args.requestType === "eventChange"
       ) {
         let data;
         let scheduleObj = this.$refs.ScheduleObj;
-        if (args.requestType === "eventCreate") {
+        if (
+          args.requestType === "eventCreate" ||
+          args.requestType === "eventRemove"
+        ) {
           data = args.data[0];
         } else if (args.requestType === "eventChange") {
           data = args.data;
@@ -230,19 +167,37 @@ export default {
         }
       }
     }
+  },
+  computed: {
+    roomDataSource() {
+      return this.$store.getters["rooms/roomsData"];
+    }
+  },
+  created() {
+    this.$store.dispatch("rooms/getRoomsData");
+    EventBus.$on("get-roomId", roomStatusData => {
+      this.$store
+        .dispatch("rooms/updateRoomStatus", roomStatusData)
+        .then(response => {
+          EventBus.$emit("message-from-app", {
+            txt: response.data,
+            status: "alert-success"
+          });
+        });
+    });
   }
 };
 </script>
 
 <style>
-.room-scheduler.e-schedule .e-timeline-view .e-resource-left-td {
+.room-scheduler.e-schedule .e-timeline-month-view .e-resource-left-td {
   vertical-align: bottom;
 }
-.room-scheduler.e-schedule.e-device .e-timeline-view .e-resource-left-td {
+.room-scheduler.e-schedule.e-device .e-timeline-month-view .e-resource-left-td {
   width: 75px;
 }
 .room-scheduler.e-schedule
-  .e-timeline-view
+  .e-timeline-month-view
   .e-resource-left-td
   .e-resource-text {
   display: flex;
@@ -250,20 +205,18 @@ export default {
   padding: 0;
 }
 .room-scheduler.e-schedule
-  .e-timeline-view
+  .e-timeline-month-view
   .e-resource-left-td
   .e-resource-text
   > div {
   border-right: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
   flex: 0 0 33.3%;
   font-weight: 500;
   height: 36px;
   line-height: 34px;
-  padding-left: 5px;
 }
 .room-scheduler.e-schedule
-  .e-timeline-view
+  .e-timeline-month-view
   .e-resource-left-td
   .e-resource-text
   > div:last-child {
@@ -272,7 +225,15 @@ export default {
 .room-scheduler.e-schedule .template-wrap {
   display: flex;
   height: 100%;
+  width: 100%;
   text-align: left;
+}
+.room-scheduler.e-schedule .template-wrap .subject {
+  flex: auto;
+  font-weight: 500;
+  padding-left: 10px;
+  font-size: 1rem;
+  line-height: 36px;
 }
 .room-scheduler.e-schedule .template-wrap > div {
   border-right: 1px solid rgba(0, 0, 0, 0.12);
@@ -286,12 +247,12 @@ export default {
 .room-scheduler.e-schedule .template-wrap > div:last-child {
   border-right: 0;
 }
-.room-scheduler.e-schedule .e-timeline-view .e-resource-cells,
+.room-scheduler.e-schedule .e-timeline-month-view .e-resource-cells,
 .room-scheduler.e-schedule .e-timeline-month-view .e-resource-cells {
   padding-left: 0;
 }
-.room-scheduler.e-schedule .e-timeline-view .e-date-header-wrap table col,
-.room-scheduler.e-schedule .e-timeline-view .e-content-wrap table col {
+.room-scheduler.e-schedule .e-timeline-month-view .e-date-header-wrap table col,
+.room-scheduler.e-schedule .e-timeline-month-view .e-content-wrap table col {
   width: 100px;
 }
 .room-scheduler.e-schedule .e-read-only {
@@ -303,11 +264,11 @@ export default {
   text-align: center;
 }
 @media (max-width: 550px) {
-  .room-scheduler.e-schedule .e-timeline-view .e-resource-left-td {
+  .room-scheduler.e-schedule .e-timeline-month-view .e-resource-left-td {
     width: 100px;
   }
   .room-scheduler.e-schedule
-    .e-timeline-view
+    .e-timeline-month-view
     .e-resource-left-td
     .e-resource-text
     > div,
@@ -318,7 +279,7 @@ export default {
     border-right: 0;
   }
   .room-scheduler.e-schedule
-    .e-timeline-view
+    .e-timeline-month-view
     .e-resource-left-td
     .e-resource-text
     > div:first-child {

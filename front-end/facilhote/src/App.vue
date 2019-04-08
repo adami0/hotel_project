@@ -2,7 +2,7 @@
   <div id="app">
     <div>
       <Navbar/>
-      <Sidebar/>
+      <!-- <Sidebar/> -->
     </div>
     <alert-message/>
     <main id="main-content">
@@ -12,9 +12,11 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import AlertMessage from "@/components/alertMessage/AlertMessage.vue";
 import Navbar from "@/components/nav/Navbar.vue";
-import Sidebar from "@/components/sidebar/Sidebar.vue";
+// import Sidebar from "@/components/sidebar/Sidebar.vue";
 import { loadCldr, L10n, setCulture } from "@syncfusion/ej2-base";
 
 import * as numberingSystems from "./../node_modules/cldr-data/supplemental/numberingSystems.json";
@@ -36,14 +38,18 @@ loadCldr(
 export default {
   components: {
     Navbar,
-    Sidebar,
+    // Sidebar,
     AlertMessage
   },
-  created: function() {
-    this.$http.interceptors.response.use(undefined, function(err) {
+  created() {
+    if (moment().unix() >= localStorage.getItem("exp")) {
+      this.$store.dispatch("users/logout");
+    }
+    axios.interceptors.response.use(undefined, function(err) {
       return new Promise(function(resolve, reject) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch(logout);
+          // if you ever get an unauthorized, logout the user
+          this.$store.dispatch("users/logout");
         }
         throw err;
       });
@@ -59,7 +65,6 @@ body {
   padding: 0;
   margin: 0;
   height: 100%;
-  overflow: hidden;
   box-sizing: border-box;
   background-color: #f8fafb;
 }

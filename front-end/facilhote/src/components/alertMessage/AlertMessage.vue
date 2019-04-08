@@ -41,6 +41,12 @@ export default {
       this.messageStatus = statuses.find(s => {
         return s === msg.status;
       });
+      setTimeout(
+        function() {
+          this.message = null;
+        }.bind(this),
+        3000
+      );
     },
     closeMessage() {
       this.message = null;
@@ -55,7 +61,7 @@ export default {
   position: absolute;
   top: 60px;
   right: 5px;
-  z-index: 2;
+  z-index: 100;
   animation-name: message;
   animation-duration: 0.5s;
   -webkit-animation-name: message; /* Safari 4.0 - 8.0 */

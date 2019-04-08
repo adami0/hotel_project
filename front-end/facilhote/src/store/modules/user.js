@@ -1,22 +1,20 @@
+/* eslint disable no-shadow */
 import axios from 'axios';
 
 const state = {
-  status: '',
-  token: localStorage.getItem('token') || '',
-  user: {},
+  token: localStorage.getItem('user-token') || '',
+  user: '' || JSON.parse(localStorage.getItem('user-data')),
+  allUsers: [],
 };
 
 const mutations = {
-  auth_request(state) {
-    state.status = 'loading';
-  },
-  auth_success(state, token, user) {
+  auth_success(state, { token, user }) {
     state.status = 'success';
     state.token = token;
     state.user = user;
   },
-  auth_error(state) {
-    state.status = 'error';
+  getAllUsers(state, users) {
+    state.allUsers = users;
   },
   logout(state) {
     state.status = '';
@@ -25,29 +23,78 @@ const mutations = {
 };
 
 const actions = {
-  login({ commit }, user) {
+  login({ commit }, userAuth) {
     return new Promise((resolve, reject) => {
-      commit('auth_request');
-      axios({ url: 'http://localhost:3000/api/v1/user/authenticate', data: user, method: 'POST' })
+      axios({
+        url: 'http://localhost:3000/api/v1/user/authenticate',
+        data: userAuth,
+        method: 'POST',
+      })
         .then((resp) => {
-          const { token } = resp.data;
-          const { userData } = resp.data;
-          localStorage.setItem('token', token);
-          // axios.defaults.headers.common.Authorization = token;
-          commit('auth_success', token, userData);
+          const { token, expires, user } = resp.data;
+          localStorage.setItem('exp', expires);
+          localStorage.setItem('user-token', token);
+          localStorage.setItem('user-data', JSON.stringify(user));
+          axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+          commit('auth_success', { token, user });
           resolve(resp);
         })
         .catch((err) => {
-          commit('auth_error');
-          localStorage.removeItem('token');
+          localStorage.removeItem('user-token');
           reject(err);
         });
     });
   },
+
+  getAllUsers({ commit }) {
+    return new Promise((resolve, reject) => {
+      axios({ url: 'http://localhost:3000/api/v1/user', method: 'GET' })
+        .then((resp) => {
+          const { data } = resp;
+          commit('getAllUsers', data);
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  deleteUser({ dispatch }, userId) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `http://localhost:3000/api/v1/user/${userId}`, method: 'DELETE' })
+        .then((resp) => {
+          dispatch('getAllUsers');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  postUserAvatar({ commit }, fileData) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: 'http://localhost:3000/api/v1/user/avatar',
+        method: 'POST',
+        fileData,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+        .then((resp) => {
+          console.log(resp);
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
   logout({ commit }) {
     return new Promise((resolve, reject) => {
       commit('logout');
-      localStorage.removeItem('token');
+      localStorage.clear();
       delete axios.defaults.headers.common.Authorization;
       resolve();
     });
@@ -57,6 +104,7 @@ const actions = {
 const getters = {
   isLoggedIn: state => !!state.token,
   authStatus: state => state.status,
+  getAllUsers: state => state.allUsers,
 };
 
 export default {

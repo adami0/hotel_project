@@ -2,11 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 // import user model and auth middleware
-const auth = require("./../../middleware/auth");
+const auth = require('./../../middleware/auth');
+const uploader = require('./../../middleware/uploader');
 const checkAuth = require('./../../middleware/check-auth');
-const userModel = require("./../../models/userModel");
+const userModel = require('./../../models/userModel');
 
 // post a new user
 router.post('/register', (req, res) => {
@@ -15,7 +17,7 @@ router.post('/register', (req, res) => {
     res.status(201).send(response);
     }, req.body);
   } catch(err) {
-    res.boom.badImplementation("soucis durant la création user");
+    res.boom.badImplementation('soucis durant la création user');
   }
 });
 
@@ -28,8 +30,9 @@ router.post('/authenticate', (req, res) => {
   userModel.authenticate(response => {
       if (!response.error) {
         const payload = { user: response.user, message: response.message };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2 days' }); // expires in 24 hours
+        const token = jwt.sign(payload, process.env.PRIVATE_KEY.replace(/\\n/g, '\n'), { expiresIn: '2 days', algorithm: 'RS256' }); // expires in 24 hours
         response.token = token;
+        response.expires = moment(moment().add(2, 'd')).format("x");
         return res.status(201).send(response);
       } else {
         res.boom.unauthorized(response);
@@ -37,13 +40,17 @@ router.post('/authenticate', (req, res) => {
   }, req.body); // le second param de userModel.login() est ici !!!
 });
 
-router.delete('/user/:id', (req, res) => {
+router.post('/avatar', uploader.single('avatar'), (req, res, next) => {
+  console.log(req.file);
+});
+
+router.delete('/:id', checkAuth, (req, res) => {
   userModel.remove((reponse) => {
       res.send(reponse);
   }, req.params.id);
 });
 
-router.get('/users', (req, res) => {
+router.get('/', checkAuth, (req, res) => {
     userModel.getUser((response) => {
       res.status(200).send(response);
     });
