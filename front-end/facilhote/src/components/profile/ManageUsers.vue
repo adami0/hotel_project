@@ -1,5 +1,6 @@
 <template>
   <div class="tab-pane table-responsive" id="users">
+    <modalProfile></modalProfile>
     <h4 class="my-2">Liste des utilisateurs</h4>
     <table v-if="$store.state.users.user.is_admin" class="table table-hover table-striped">
       <thead>
@@ -10,7 +11,13 @@
           <th scope="col">Mot de passe</th>
           <th scope="col">Date de création</th>
           <th colspan="2">
-            <button type="button" class="btn btn-success">
+            <button
+              type="button"
+              @click="createUser"
+              class="btn btn-success"
+              data-toggle="modal"
+              data-target="#formCreateUserModal"
+            >
               <font-awesome-icon icon="plus-circle" size="lg"/>
             </button>
           </th>
@@ -77,7 +84,11 @@
 <script>
 import moment from "moment";
 import { EventBus } from "./../../event-bus";
+import modalProfile from "./form";
 export default {
+  components: {
+    modalProfile
+  },
   data() {
     return {
       editMode: false,
@@ -102,6 +113,9 @@ export default {
           });
         });
       }
+    },
+    createUser(event) {
+      EventBus.$emit("open-modal", event);
     }
   },
   computed: {

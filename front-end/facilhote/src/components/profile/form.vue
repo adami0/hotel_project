@@ -1,94 +1,83 @@
 <template>
-  <form role="form">
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">First name</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="text" value="Jane">
+  <div
+    class="modal fade"
+    id="formCreateUserModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="formCreateUserModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formCreateUserModalLabel">Création d'un nouvel utilisateur</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form">
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Nom de l'utilisateur</label>
+              <div class="col-lg-9">
+                <input class="form-control" type="text" v-model="userName">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Email</label>
+              <div class="col-lg-9">
+                <input class="form-control" type="email" v-model="email">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Admin</label>
+              <div class="col-lg-9">
+                <input class="form-control" type="checkbox" v-model="admin">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Mot de passe</label>
+              <div class="col-lg-9">
+                <input class="form-control" type="password" v-model="password">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Confirmer mot de passe</label>
+              <div class="col-lg-9">
+                <input class="form-control" type="password" v-model="confirmPassword">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-success">Confirmer</button>
+        </div>
       </div>
     </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Last name</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="text" value="Bishop">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Email</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="email" value="email@gmail.com">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Company</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="text" value>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Website</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="url" value>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Address</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="text" value placeholder="Street">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label"></label>
-      <div class="col-lg-6">
-        <input class="form-control" type="text" value placeholder="City">
-      </div>
-      <div class="col-lg-3">
-        <input class="form-control" type="text" value placeholder="State">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Time Zone</label>
-      <div class="col-lg-9">
-        <select id="user_time_zone" class="form-control" size="0">
-          <option value="Hawaii">(GMT-10:00) Hawaii</option>
-          <option value="Alaska">(GMT-09:00) Alaska</option>
-          <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-          <option value="Arizona">(GMT-07:00) Arizona</option>
-          <option
-            value="Mountain Time (US &amp; Canada)"
-          >(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-          <option
-            value="Central Time (US &amp; Canada)"
-            selected="selected"
-          >(GMT-06:00) Central Time (US &amp; Canada)</option>
-          <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-          <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Username</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="text" value="janeuser">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Password</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="password" value="11111122333">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label">Confirm password</label>
-      <div class="col-lg-9">
-        <input class="form-control" type="password" value="11111122333">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-lg-3 col-form-label form-control-label"></label>
-      <div class="col-lg-9">
-        <input type="reset" class="btn btn-secondary" value="Cancel">
-        <input type="button" class="btn btn-primary" value="Save Changes">
-      </div>
-    </div>
-  </form>
+  </div>
 </template>
+<script>
+import { EventBus } from "./../../event-bus";
+export default {
+  data() {
+    return {
+      userName: "Jane",
+      email: "coucou@gmail.fr",
+      password: "ydjshfjid",
+      confirmPassword: "ydjshfjid",
+      admin: false
+    };
+  },
+  created() {
+    EventBus.$on("open-modal", event => {
+      console.log(event);
+    });
+  }
+};
+</script>
+
+<style scoped>
+</style>
+
+

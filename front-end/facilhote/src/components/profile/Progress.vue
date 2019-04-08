@@ -71,12 +71,12 @@ export default {
     startColor: {
       type: String,
       required: false,
-      default: "#2ecc71"
+      default: "#e74c3c"
     },
     stopColor: {
       type: String,
       required: false,
-      default: "#e74c3c"
+      default: "#2ecc71"
     },
     strokeWidth: {
       type: Number,
