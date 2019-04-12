@@ -71,7 +71,7 @@ export default {
     startColor: {
       type: String,
       required: false,
-      default: "#e74c3c"
+      default: "#2ecc71"
     },
     stopColor: {
       type: String,
@@ -260,6 +260,10 @@ export default {
 <style>
 .radial-progress-container {
   position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
 }
 .radial-progress-inner {
   position: absolute;
@@ -267,7 +271,6 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  position: absolute;
   border-radius: 50%;
   margin: 0 auto;
   display: flex;

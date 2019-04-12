@@ -61,7 +61,7 @@ export default {
   position: absolute;
   top: 60px;
   right: 5px;
-  z-index: 100;
+  z-index: 2000;
   animation-name: message;
   animation-duration: 0.5s;
   -webkit-animation-name: message; /* Safari 4.0 - 8.0 */

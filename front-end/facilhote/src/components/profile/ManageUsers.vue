@@ -1,6 +1,7 @@
 <template>
   <div class="tab-pane table-responsive" id="users">
-    <modalProfile></modalProfile>
+    <ModalCreateUser></ModalCreateUser>
+    <ModalChangePassword></ModalChangePassword>
     <h4 class="my-2">Liste des utilisateurs</h4>
     <table v-if="$store.state.users.user.is_admin" class="table table-hover table-striped">
       <thead>
@@ -13,7 +14,6 @@
           <th colspan="2">
             <button
               type="button"
-              @click="createUser"
               class="btn btn-success"
               data-toggle="modal"
               data-target="#formCreateUserModal"
@@ -27,7 +27,7 @@
         <tr
           v-for="user in allUsersData"
           :key="user.id"
-          :class="{editing: user == editedUser}"
+          :class="{editing: user === editedUser}"
           v-cloak
         >
           <th scope="row">
@@ -49,7 +49,13 @@
             </span>
           </td>
           <td>
-            <button type="button" class="btn btn-secondary">
+            <button
+              type="button"
+              data-toggle="modal"
+              @click.prevent="changePassword(user)"
+              data-target="#formChangeUserPasswordModal"
+              class="btn btn-secondary"
+            >
               <font-awesome-icon icon="key" size="lg"/>
             </button>
           </td>
@@ -60,13 +66,21 @@
             </span>
           </td>
           <td>
-            <button type="button" @click="editUser(user)" class="btn btn-info">
-              <font-awesome-icon icon="edit" size="lg"/>
+            <button
+              type="button"
+              @click.stop="user.isSelected ? updateUser(user) : editUser(user)"
+              :class="user.isSelected ? 'btn btn-success' : 'btn btn-info'"
+            >
+              <font-awesome-icon :icon="user.isSelected ? 'check-circle' : 'edit'" size="lg"/>
             </button>
           </td>
           <td>
-            <button type="button" @click="deleteUser(user) " class="btn btn-danger">
-              <font-awesome-icon icon="trash-alt" size="lg"/>
+            <button
+              type="button"
+              @click.stop="user.isSelected ? cancelEdit(user): deleteUser(user)"
+              :class="user.isSelected ? 'btn btn-warning' : 'btn btn-danger'"
+            >
+              <font-awesome-icon :icon="user.isSelected ? 'times-circle' : 'trash-alt'" size="lg"/>
             </button>
           </td>
         </tr>
@@ -84,10 +98,12 @@
 <script>
 import moment from "moment";
 import { EventBus } from "./../../event-bus";
-import modalProfile from "./form";
+import ModalCreateUser from "./ModalCreateUser";
+import ModalChangePassword from "./ModalChangePassword";
 export default {
   components: {
-    modalProfile
+    ModalCreateUser,
+    ModalChangePassword
   },
   data() {
     return {
@@ -97,9 +113,29 @@ export default {
   },
   methods: {
     editUser(user) {
-      console.log(user);
-      this.beforEditCache = user;
+      this.editMode = true;
       this.editedUser = user;
+      user.isSelected = true;
+    },
+    updateUser(user) {
+      this.editMode = false;
+      this.editedUser = null;
+      user.isSelected = false;
+      console.log(user);
+      this.$store.dispatch("users/updateUser", user).then(response => {
+        EventBus.$emit("message-from-app", {
+          txt: response.data.message,
+          status: "alert-success"
+        });
+      });
+    },
+    cancelEdit(user) {
+      this.editMode = false;
+      this.editedUser = null;
+      user.isSelected = false;
+    },
+    changePassword(user) {
+      EventBus.$emit("change-user-password", user);
     },
     deleteUser(user) {
       let answer = confirm(
@@ -113,9 +149,6 @@ export default {
           });
         });
       }
-    },
-    createUser(event) {
-      EventBus.$emit("open-modal", event);
     }
   },
   computed: {

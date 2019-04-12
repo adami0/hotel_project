@@ -23,7 +23,7 @@ const mutations = {
 const actions = {
   getReservationsKpi({ commit }) {
     return new Promise((resolve, reject) => {
-      axios({ url: 'http://localhost:3000/api/v1/kpi/reservationsPerMonth', method: 'GET' })
+      axios({ url: '/api/v1/kpi/reservationsPerMonth', method: 'GET' })
         .then((resp) => {
           const { data } = resp;
           commit('getReservationsKpi', data);
@@ -37,7 +37,7 @@ const actions = {
 
   getProfitKpi({ commit }) {
     return new Promise((resolve, reject) => {
-      axios({ url: 'http://localhost:3000/api/v1/kpi/profitPerMonth', method: 'GET' })
+      axios({ url: '/api/v1/kpi/profitPerMonth', method: 'GET' })
         .then((resp) => {
           const { data } = resp;
           commit('getProfitKpi', data);
@@ -51,7 +51,7 @@ const actions = {
 
   getRoomsStatuKpi({ commit }) {
     return new Promise((resolve, reject) => {
-      axios({ url: 'http://localhost:3000/api/v1/kpi/roomStatus', method: 'GET' })
+      axios({ url: '/api/v1/kpi/roomStatus', method: 'GET' })
         .then((resp) => {
           const { data } = resp;
           commit('getRoomsStatuKpi', data);

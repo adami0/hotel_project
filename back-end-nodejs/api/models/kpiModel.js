@@ -69,7 +69,7 @@ const getRoomStatus = clbk => {
                   FROM
                       reservation
                   WHERE
-                      DATE(arrival_date) = CURDATE() OR DATE(departure_date) = CURDATE()
+                      CURDATE() BETWEEN arrival_date AND departure_date
                 ) C`;
 
   mysql.query(q, (error, results, fields) => {

@@ -3,10 +3,11 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const fs = require('fs');
 
 // import user model and auth middleware
 const auth = require('./../../middleware/auth');
-const uploader = require('./../../middleware/uploader');
+const upload = require('./../../middleware/uploader');
 const checkAuth = require('./../../middleware/check-auth');
 const userModel = require('./../../models/userModel');
 
@@ -17,7 +18,7 @@ router.post('/register', (req, res) => {
     res.status(201).send(response);
     }, req.body);
   } catch(err) {
-    res.boom.badImplementation('soucis durant la création user');
+    res.boom.badImplementation('soucis durant la création du user');
   }
 });
 
@@ -40,26 +41,59 @@ router.post('/authenticate', (req, res) => {
   }, req.body); // le second param de userModel.login() est ici !!!
 });
 
-router.post('/avatar', uploader.single('avatar'), (req, res, next) => {
-  console.log(req.file);
+router.patch('/avatar', checkAuth, upload.single('avatar'), (req, res, next) => {
+  if (req.body.url) {
+    fs.unlinkSync(req.body.url);
+  }
+  userModel.patch.avatar(response => {
+    res.status(201).send(response);
+  }, req.file.path, req.userData.user.id);
+});
+
+router.patch('/password', checkAuth, (req, res, next) => {
+  userModel.patch.password(response => {
+    res.status(201).send(response);
+  }, req.body);
 });
 
 router.delete('/:id', checkAuth, (req, res) => {
-  userModel.remove((reponse) => {
-      res.send(reponse);
+  userModel.remove((response) => {
+      res.status(201).send(response);
   }, req.params.id);
+});
+
+router.put('/', checkAuth, (req, res) => {
+  userModel.putUser((response) => {
+    res.status(201).send(response);
+  }, req.body);
 });
 
 router.get('/', checkAuth, (req, res) => {
     userModel.getUser((response) => {
-      res.status(200).send(response);
+      res.status(201).send(response);
     });
 });
 
-router.get('/:id', checkAuth, (req, res) => {
+router.post('/getAvatar', checkAuth, (req, res) => {
+  console.log(req.body);
+
+  if (req.body.avatar) {
+    setTimeout(() => {
+      const ext = req.body.avatar.split('.');
+      const binaryImage = fs.readFileSync(req.body.avatar);
+      const newImage = {
+        contentType: `image/${ext[1]}`,
+        data: binaryImage
+      };
+      res.status(201).send(newImage);
+    }, 500);
+  }
+});
+
+router.get('/getById', checkAuth, (req, res) => {
   userModel.getUser((response) => {
-    res.status(200).send(response);
-  }, req.params.id);
+    res.status(201).send(response);
+  }, req.userData.user.id);
 });
 
 module.exports = router;

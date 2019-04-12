@@ -9,7 +9,7 @@
     >
       <img
         v-if="$store.state.users.user.avatar"
-        :src="$store.state.users.user.avatar"
+        :src="this.$store.state.users.avatar"
         height="120px"
         width="120px"
         class="rounded avatar mx-auto d-block"
@@ -27,7 +27,7 @@
     <h6 class="my-3">Modifier la photo de profil</h6>
     <form ref="avatar" @change="uploadAvatar($event)" enctype="multipart/form-data">
       <div class="form-group">
-        <input type="file" name="avatar" class="form-control-file">
+        <input type="file" name="avatar" accept="image/*" class="form-control-file">
       </div>
     </form>
   </div>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      completedSteps: 5,
+      completedSteps: 0,
       totalSteps: 10
     };
   },
@@ -65,18 +65,25 @@ export default {
       if (checked) {
         const formData = new FormData();
         formData.append("avatar", imageFile);
-        this.$store.dispatch("users/postUserAvatar");
-        console.log(formData);
+        if (this.$store.state.users.user.avatar) {
+          formData.append("url", this.$store.state.users.user.avatar);
+        }
+        this.$store
+          .dispatch("users/updateUserAvatar", formData)
+          .then(percentLoaded => {
+            this.completedSteps = percentLoaded;
+            this.$store.dispatch(
+              "users/getUserAvatar",
+              this.$store.state.users.user.avatar
+            );
+          });
       } else {
         EventBus.$emit("message-from-app", {
-          txt: "je ne veux pas de ton fichier banane 🙊",
+          txt: "Le format de fichier n'est pas valide (png ou jpeg)",
           status: "alert-warning"
         });
       }
     }
-  },
-  created() {
-    console.log(this.$store);
   }
 };
 </script>

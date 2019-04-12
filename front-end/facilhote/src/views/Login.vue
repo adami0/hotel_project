@@ -89,7 +89,7 @@ export default {
             });
           } else {
             EventBus.$emit("message-from-app", {
-              txt: "Votre email ou mot de passe n'est pas correct 🤖",
+              txt: "Votre email ou mot de passe n'est pas correct",
               status: "alert-warning"
             });
           }

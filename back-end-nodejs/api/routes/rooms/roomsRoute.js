@@ -6,6 +6,19 @@ const router = express.Router();
 const checkAuth = require('./../../middleware/check-auth');
 const roomsModel = require("./../../models/roomModel");
 
+
+// post a new room
+router.post('/register', (req, res) => {
+  try {
+    roomsModel.register(response => {
+      res.status(201).send(response);
+    }, req.body);
+  } catch(err) {
+    res.boom.badImplementation('soucis durant la création de la room');
+  }
+});
+
+
 /**
  * Route '/rooms' must be auth
  */

@@ -8,18 +8,12 @@ const mutations = {
   getAllReservation(state, data) {
     state.reservationData = data;
   },
-
-  createReservation(state, data) {},
-
-  updateReservation(state, data) {},
-
-  deleteReservation(state, data) {},
 };
 
 const actions = {
-  getReservationData({ commit }) {
+  getReservationsData({ commit }) {
     return new Promise((resolve, reject) => {
-      axios({ url: 'http://localhost:3000/api/v1/reservation', method: 'GET' })
+      axios({ url: '/api/v1/reservation', method: 'GET' })
         .then((resp) => {
           const { data } = resp;
           localStorage.setItem('reservations-data', JSON.stringify(data));
@@ -31,9 +25,54 @@ const actions = {
         });
     });
   },
+
+  createNewReservation({ dispatch }, reservationData) {
+    return new Promise((resolve, reject) => {
+      axios({ url: '/api/v1/reservation', data: reservationData, method: 'POST' })
+        .then((resp) => {
+          dispatch('getReservationsData');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  updateReservation({ dispatch }, reservationData) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/v1/reservation/${reservationData.Id}`,
+        data: reservationData,
+        method: 'PUT',
+      })
+        .then((resp) => {
+          dispatch('getReservationsData');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  deleteReservation({ dispatch }, reservationId) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/api/v1/reservation/${reservationId.Id}`, method: 'DELETE' })
+        .then((resp) => {
+          dispatch('getReservationsData');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
 };
 
-const getters = {};
+const getters = {
+  getAllReservations: state => state.reservationData,
+};
 
 export default {
   namespaced: true,

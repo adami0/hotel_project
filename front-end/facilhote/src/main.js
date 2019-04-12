@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faHome, faCaretDown, faUser, faPlusCircle, faCalendarAlt,
   faBroom, faBed, faDoorOpen, faTimes, faCheckCircle, faPowerOff,
-  faTimesCircle, faEdit, faTrashAlt, faKey, faList,
+  faTimesCircle, faEdit, faTrashAlt, faKey, faList, faCog, faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './App.vue';
@@ -16,9 +16,10 @@ import './registerServiceWorker';
 library.add(
   faHome, faCaretDown, faUser, faBed, faBroom, faPlusCircle, faPowerOff,
   faCalendarAlt, faDoorOpen, faTimes, faCheckCircle, faTimesCircle, faEdit,
-  faTrashAlt, faKey, faList,
+  faTrashAlt, faKey, faList, faCog, faBars,
 );
 
+axios.defaults.baseURL = 'http://localhost:3000';
 Vue.prototype.$http = axios;
 const token = localStorage.getItem('user-token');
 if (token) {
