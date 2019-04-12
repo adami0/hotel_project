@@ -40,8 +40,22 @@ export default {
       return this.$store.getters["kpis/roomsStatuKpisData"];
     }
   },
+  methods: {
+    arrayBufferToBase64(buffer) {
+      var binary = "";
+      var bytes = [].slice.call(new Uint8Array(buffer));
+      bytes.forEach(b => (binary += String.fromCharCode(b)));
+      return window.btoa(binary);
+    }
+  },
   created() {
     this.$store.dispatch("kpis/getRoomsStatuKpi");
+    const avatar = this.$store.state.users.user.avatar;
+    this.$store.dispatch("users/getUserAvatar", avatar).then(res => {
+      const imageStr = this.arrayBufferToBase64(res.data.data.data);
+      const imageBase64 = `data:image/jpeg;base64,${imageStr}`;
+      localStorage.setItem("user-avatar", imageBase64);
+    });
   }
 };
 </script>

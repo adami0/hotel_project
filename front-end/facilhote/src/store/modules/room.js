@@ -13,7 +13,7 @@ const mutations = {
 const actions = {
   getRoomsData({ commit }) {
     return new Promise((resolve, reject) => {
-      axios({ url: 'http://localhost:3000/api/v1/rooms', method: 'GET' })
+      axios({ url: '/api/v1/rooms', method: 'GET' })
         .then((resp) => {
           const { data } = resp;
           localStorage.setItem('rooms-data', JSON.stringify(data));
@@ -28,9 +28,26 @@ const actions = {
 
   deleteRoom({ dispatch }, roomId) {
     return new Promise((resolve, reject) => {
-      axios({ url: `http://localhost:3000/api/v1/rooms/${roomId}`, method: 'DELETE' })
+      axios({ url: `/api/v1/rooms/${roomId}`, method: 'DELETE' })
         .then((resp) => {
           dispatch('getRoomsData');
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  createRoom({ dispatch }, newRoom) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: '/api/v1/rooms/register',
+        data: newRoom,
+        method: 'POST',
+      })
+        .then((resp) => {
+          dispatch('getAllRooms');
           resolve(resp);
         })
         .catch((err) => {
@@ -43,7 +60,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       const { roomStatus, roomId } = roomStatusData;
       axios({
-        url: `http://localhost:3000/api/v1/rooms/${roomId}`,
+        url: `/api/v1/rooms/${roomId}`,
         data: { room_status: roomStatus },
         method: 'PATCH',
       })

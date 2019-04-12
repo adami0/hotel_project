@@ -10,7 +10,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="formCreateUserModalLabel">Création d'un nouvel utilisateur</h5>
+          <h5 class="modal-title" id="formCreateUserModalLabel">Créer un compte utilisateur</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -51,7 +51,12 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-success">Confirmer</button>
+          <button
+            type="button"
+            class="btn btn-success"
+            data-dismiss="modal"
+            @click="createUser"
+          >Confirmer</button>
         </div>
       </div>
     </div>
@@ -62,22 +67,35 @@ import { EventBus } from "./../../event-bus";
 export default {
   data() {
     return {
-      userName: "Jane",
-      email: "coucou@gmail.fr",
-      password: "ydjshfjid",
-      confirmPassword: "ydjshfjid",
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
       admin: false
     };
   },
-  created() {
-    EventBus.$on("open-modal", event => {
-      console.log(event);
-    });
+  methods: {
+    createUser() {
+      const newUser = {
+        userName: this.userName,
+        email: this.email,
+        password: this.password,
+        admin: this.admin
+      };
+      if (this.password === this.confirmPassword) {
+        this.$store.dispatch("users/createUser", newUser).then(res => {
+          EventBus.$emit("message-from-app", {
+            txt: res.data.message,
+            status: "alert-success"
+          });
+        });
+      } else {
+        EventBus.$emit("message-from-app", {
+          txt: "Les mots de passe ne correspondent pas !",
+          status: "alert-warning"
+        });
+      }
+    }
   }
 };
 </script>
-
-<style scoped>
-</style>
-
-

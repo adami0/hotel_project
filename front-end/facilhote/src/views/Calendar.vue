@@ -28,9 +28,9 @@
         <e-resources>
           <e-resource
             field="RoomId"
-            title="Room Type"
+            title="Numéro de chambre"
             name="Rooms"
-            allowMultiple="true"
+            allowMultiple="false"
             :dataSource="roomDataSource"
             textField="room_nb"
             idField="id_room"
@@ -52,7 +52,6 @@ import { extend, isNullOrUndefined, loadCldr } from "@syncfusion/ej2-base";
 import resourceHeaderVue from "@/components/calendar/ResourceHeader";
 import monthTempVue from "@/components/calendar/MonthHeader";
 import { EventBus } from "./../event-bus";
-import { roomData } from "./../datasource";
 
 export default {
   data() {
@@ -60,18 +59,6 @@ export default {
       cssClass: "room-scheduler",
       locale: "fr",
       virtualScroll: true,
-      eventSettings: {
-        dataSource: roomData,
-        enableTooltip: true,
-        fields: {
-          id: "Id",
-          subject: { title: "Nom", name: "Subject" },
-          location: { title: "Prénom", name: "Location" },
-          description: { title: "Comentaires", name: "Description" },
-          startTime: { title: "à partir de", name: "StartTime" },
-          endTime: { title: "jusqu'à", name: "EndTime" }
-        }
-      },
       selectedDate: new Date(),
       timeScale: { enable: true, interval: 60, slotCount: 1 },
       currentView: "TimelineMonth",
@@ -130,22 +117,16 @@ export default {
         args.elementType === "emptyCells" &&
         args.element.classList.contains("e-resource-left-td")
       ) {
-        this.$store
-          .dispatch("reservations/getReservationData")
-          .then(response => {
-            console.log(response);
-            //this.eventSettings.dataSource = response.data;
-          });
         let target = args.element.querySelector(".e-resource-text");
         target.innerHTML =
           '<div class="name">Chambres</div><div class="type">Type</div><div class="state">État</div>';
       }
     },
     onActionBegin(args) {
-      console.log(args);
       if (
         args.requestType === "eventCreate" ||
-        args.requestType === "eventChange"
+        args.requestType === "eventChange" ||
+        args.requestType === "eventRemove"
       ) {
         let data;
         let scheduleObj = this.$refs.ScheduleObj;
@@ -154,8 +135,42 @@ export default {
           args.requestType === "eventRemove"
         ) {
           data = args.data[0];
+
+          if (
+            args.requestType === "eventRemove" &&
+            args.requestType !== "eventCreate"
+          ) {
+            this.$store
+              .dispatch("reservations/deleteReservation", data)
+              .then(res => {
+                EventBus.$emit("message-from-app", {
+                  txt: res.data.message,
+                  status: "alert-success"
+                });
+              });
+          } else if (
+            args.requestType !== "eventRemove" &&
+            args.requestType === "eventCreate"
+          ) {
+            this.$store
+              .dispatch("reservations/createNewReservation", data)
+              .then(res => {
+                EventBus.$emit("message-from-app", {
+                  txt: res.data.message,
+                  status: "alert-success"
+                });
+              });
+          }
         } else if (args.requestType === "eventChange") {
           data = args.data;
+          this.$store
+            .dispatch("reservations/updateReservation", data)
+            .then(res => {
+              EventBus.$emit("message-from-app", {
+                txt: res.data.message,
+                status: "alert-success"
+              });
+            });
         }
         let groupIndex = scheduleObj.ej2Instances.eventBase.getGroupIndexFromEvent(
           data
@@ -169,11 +184,26 @@ export default {
     }
   },
   computed: {
+    eventSettings() {
+      return {
+        dataSource: this.$store.getters["reservations/getAllReservations"],
+        enableTooltip: true,
+        fields: {
+          id: "Id",
+          subject: { title: "Nom et Prénom", name: "Subject" },
+          location: { title: "Nombre de nuits", name: "Location" },
+          description: { title: "Prix", name: "Description" },
+          startTime: { title: "à partir de", name: "StartTime" },
+          endTime: { title: "jusqu'à", name: "EndTime" }
+        }
+      };
+    },
     roomDataSource() {
       return this.$store.getters["rooms/roomsData"];
     }
   },
   created() {
+    this.$store.dispatch("reservations/getReservationsData");
     this.$store.dispatch("rooms/getRoomsData");
     EventBus.$on("get-roomId", roomStatusData => {
       this.$store

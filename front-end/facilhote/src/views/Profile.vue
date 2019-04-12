@@ -2,7 +2,7 @@
   <div class="container my-5">
     <div class="row">
       <avatar></avatar>
-      <div class="col-lg-9">
+      <div class="col-sm-12 col-lg-9">
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a href data-target="#profile" data-toggle="tab" class="nav-link active">Profil</a>

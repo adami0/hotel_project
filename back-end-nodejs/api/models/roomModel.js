@@ -38,7 +38,25 @@ const updateRoomStatus = (clbk, data, id) => {
   });
 };
 
+const postRoom = (clbk, data) => {
+  const q = `INSERT
+              room
+            SET
+              room_nb = ${mysql.escape(data.room_nb)},
+              room_status = ${mysql.escape(data.room_status)},
+              room_type = ${mysql.escape(data.room_type)},
+              color = ${mysql.escape(data.color)}`;
+
+  mysql.query(q, (error, results, fields) => {
+    if (error) throw error;
+    results.message = "Création de la chambre avec succès !";
+    clbk(results);
+  });
+};
+
+
 module.exports = {
   getRooms,
   updateRoomStatus,
+  postRoom,
 };

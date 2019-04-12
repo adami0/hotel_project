@@ -8,7 +8,7 @@ const getUser = (clbk, id) => {
 
   if (id) {
     q = `SELECT
-            id, email, avatar, about, is_admin
+            id, username, email, avatar, created_at, about, is_admin
         FROM
             user
         WHERE
@@ -52,12 +52,13 @@ const register = (clbk, data) => {
     // la base ne contient pas encore cette adresse mail, poursuivons l'insertion
     const hash = bcrypt.hashSync(data.password, 10);
     const q = `INSERT INTO
-                  user (username, email, password)
+                  user (username, email, password, is_admin)
               VALUES
                   (
-                  ${mysql.escape(data.username)},
+                  ${mysql.escape(data.userName)},
                   ${mysql.escape(data.email)},
-                  ${mysql.escape(hash)}
+                  ${mysql.escape(hash)},
+                  ${mysql.escape(data.admin)}
                   )`;
 
     mysql.query(q, (error, results, fields) => {
@@ -138,6 +139,23 @@ const authenticate = (clbk, data) => {
   });
 };
 
+const putUser = (clbk, data) => {
+  const q = `UPDATE
+                user
+            SET
+                username = ${mysql.escape(data.username)},
+                email = ${mysql.escape(data.email)},
+                is_admin = ${mysql.escape(data.is_admin)}
+            WHERE
+                id = ${mysql.escape(data.id)}`;
+
+  mysql.query(q, (error, results, fields) => {
+    if (error) throw error;
+    results.message = "Modification effectuée avec succès !";
+    clbk(results);
+  });
+};
+
 const patchAbout = (clbk, about, id) => {
   const q = `UPDATE
                 user
@@ -152,6 +170,22 @@ const patchAbout = (clbk, about, id) => {
   });
 };
 
+const patchUserPassword = (clbk, data) => {
+  const hash = bcrypt.hashSync(data.password, 10);
+  const q = `UPDATE
+                user
+            SET
+                password = ${mysql.escape(hash)}
+            WHERE
+                id = ${mysql.escape(data.id)}`;
+
+  mysql.query(q, (error, results, fields) => {
+  if (error) throw error;
+  results.message = 'Votre mot de passe a été modifié avec succès';
+  clbk(results);
+  });
+};
+
 const patchAvatar = (clbk, avatar, id) => {
   const q = `UPDATE
                 user
@@ -162,6 +196,7 @@ const patchAvatar = (clbk, avatar, id) => {
 
   mysql.query(q, (error, results, fields) => {
     if (error) throw error;
+    results.message = 'Profil mise a jour';
     clbk(results);
   });
 };
@@ -170,9 +205,11 @@ module.exports = {
   getUser,
   register,
   authenticate,
+  putUser,
   patch: {
     about: patchAbout,
     avatar: patchAvatar,
+    password: patchUserPassword,
   },
   remove,
 };

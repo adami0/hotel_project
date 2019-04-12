@@ -40,9 +40,6 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: {
     freeRooms: {
       type: Number,

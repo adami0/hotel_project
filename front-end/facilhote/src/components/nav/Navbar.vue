@@ -10,7 +10,7 @@
       <img
         v-if="$store.state.users.user.avatar"
         class="avatar"
-        :src="$store.state.users.user.avatar"
+        :src="this.$store.state.users.avatar"
         height="48px"
         width="48px"
       >
@@ -22,7 +22,9 @@
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
-      ></a>
+      >
+        <font-awesome-icon :icon="isMobile ? 'bars' : 'cog'" size="lg"/>
+      </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <router-link class="dropdown-item mobile" to="/">
           <font-awesome-icon icon="home" size="lg"/>
@@ -64,16 +66,20 @@
 export default {
   data() {
     return {
+      isMobile: window.innerWidth <= 600
       // isActive: false,
       // activeIcon: "bars"
     };
   },
-  // created() {
-  //   EventBus.$on("hide-sidebar", status => {
-  //     this.isActive = status;
-  //     this.activeIcon = this.isActive ? "times" : "bars";
-  //   });
-  // },
+  created() {
+    addEventListener("resize", () => {
+      this.isMobile = innerWidth <= 600;
+    });
+    // EventBus.$on("hide-sidebar", status => {
+    //   this.isActive = status;
+    //   this.activeIcon = this.isActive ? "times" : "bars";
+    // });
+  },
   computed: {
     isLoggedIn() {
       return this.$store.getters["users/isLoggedIn"];
@@ -130,7 +136,7 @@ export default {
 .dropdown-item:hover {
   background: #8d7154;
 }
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 600px) {
   .nav-bg_color.home {
     display: none;
   }
